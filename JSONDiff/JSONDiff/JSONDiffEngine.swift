@@ -135,3 +135,32 @@ enum JSONDiffEngine {
         return rows
     }
 }
+
+enum JSONFileLoader {
+    enum LoadError: LocalizedError {
+        case notAFile
+        case unsupportedEncoding
+
+        var errorDescription: String? {
+            switch self {
+            case .notAFile: "Drop a JSON file, not a folder."
+            case .unsupportedEncoding: "The file is not valid UTF-8 text."
+            }
+        }
+    }
+
+    static func load(from url: URL) async throws -> String {
+        try await Task.detached(priority: .userInitiated) {
+            let accessed = url.startAccessingSecurityScopedResource()
+            defer { if accessed { url.stopAccessingSecurityScopedResource() } }
+
+            let values = try url.resourceValues(forKeys: [.isRegularFileKey])
+            guard values.isRegularFile == true else { throw LoadError.notAFile }
+            let data = try Data(contentsOf: url, options: [.mappedIfSafe])
+            guard let text = String(data: data, encoding: .utf8) else {
+                throw LoadError.unsupportedEncoding
+            }
+            return text
+        }.value
+    }
+}

@@ -137,9 +137,9 @@ struct ContentView: View {
 
     private var editorPane: some View {
         HSplitView {
-            JSONEditor(title: "Left JSON", text: $model.leftJSON)
+            JSONEditor(title: "Left JSON", text: $model.leftJSON) { model.errorMessage = $0 }
                 .focused($focusedEditor, equals: .left)
-            JSONEditor(title: "Right JSON", text: $model.rightJSON)
+            JSONEditor(title: "Right JSON", text: $model.rightJSON) { model.errorMessage = $0 }
                 .focused($focusedEditor, equals: .right)
         }
         .defaultFocus($focusedEditor, .left)
@@ -180,6 +180,8 @@ struct ContentView: View {
 private struct JSONEditor: View {
     let title: LocalizedStringKey
     @Binding var text: String
+    let reportError: (String) -> Void
+    @State private var isDropTarget = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -193,9 +195,23 @@ private struct JSONEditor: View {
                 .background(.background.secondary, in: .rect(cornerRadius: 8))
                 .overlay {
                     RoundedRectangle(cornerRadius: 8)
-                        .stroke(.separator, lineWidth: 1)
+                        .stroke(
+                            isDropTarget ? Color.accentColor : Color.secondary.opacity(0.35),
+                            lineWidth: isDropTarget ? 2 : 1
+                        )
                 }
                 .accessibilityLabel(title)
+                .dropDestination(for: URL.self) { urls, _ in
+                    guard let url = urls.first else { return false }
+                    Task {
+                        do {
+                            text = try await JSONFileLoader.load(from: url)
+                        } catch {
+                            reportError(error.localizedDescription)
+                        }
+                    }
+                    return true
+                } isTargeted: { isDropTarget = $0 }
         }
         .padding(12)
         .frame(minWidth: 300)
