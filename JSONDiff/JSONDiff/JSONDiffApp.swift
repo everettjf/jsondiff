@@ -21,6 +21,21 @@ struct JSONDiffApp: App {
                 .keyboardShortcut(.delete, modifiers: [.command, .shift])
             }
         }
+
+        Settings {
+            Form {
+                Section("More Apps") {
+                    Link(destination: URL(string: "https://apps.apple.com/us/app/startmyapp-fast-app-launch/id6753610893")!) {
+                        Label("StartMyApp", systemImage: "bolt")
+                    }
+                    Link(destination: URL(string: "https://apps.apple.com/us/app/scriptwidget/id1555600758")!) {
+                        Label("ScriptWidget", systemImage: "curlybraces.square")
+                    }
+                }
+            }
+            .formStyle(.grouped)
+            .frame(width: 420, height: 220)
+        }
     }
 }
 
