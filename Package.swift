@@ -11,9 +11,7 @@ let package = Package(
     targets: [
         .target(
             name: "JSONDiffCore",
-            path: "JSONDiff/JSONDiff",
-            exclude: ["ContentView.swift", "JSONDiffApp.swift"],
-            sources: ["JSONDiffEngine.swift"]
+            path: "JSONDiff/JSONDiff/Core"
         ),
         .testTarget(
             name: "JSONDiffCoreTests",

@@ -1,49 +1,5 @@
 import Foundation
 
-nonisolated enum DiffKind: Equatable, Sendable {
-    case unchanged
-    case removed
-    case added
-    case modified
-}
-
-nonisolated struct DiffRow: Identifiable, Equatable, Sendable {
-    let id: Int
-    let leftLineNumber: Int?
-    let rightLineNumber: Int?
-    let left: String
-    let right: String
-    let kind: DiffKind
-}
-
-nonisolated struct DiffSummary: Equatable, Sendable {
-    let unchanged: Int
-    let added: Int
-    let removed: Int
-    let modified: Int
-
-    var changes: Int { added + removed + modified }
-    var isIdentical: Bool { changes == 0 }
-}
-
-nonisolated struct JSONDiffResult: Equatable, Sendable {
-    let rows: [DiffRow]
-    let formattedLeft: String
-    let formattedRight: String
-    let summary: DiffSummary
-}
-
-nonisolated enum JSONDiffError: LocalizedError, Equatable {
-    case invalidJSON(side: String, detail: String)
-
-    var errorDescription: String? {
-        switch self {
-        case let .invalidJSON(side, detail):
-            return "Invalid \(side) JSON: \(detail)"
-        }
-    }
-}
-
 nonisolated private enum JSONValue: Decodable, Sendable {
     case object([String: JSONValue])
     case array([JSONValue])
@@ -120,12 +76,7 @@ nonisolated enum JSONDiffEngine {
         do {
             return try JSONDecoder().decode(JSONValue.self, from: Data(value.utf8)).prettyPrinted()
         } catch {
-            let detail: String
-            if let decodingError = error as? DecodingError {
-                detail = decodingError.conciseDescription
-            } else {
-                detail = error.localizedDescription
-            }
+            let detail = (error as? DecodingError)?.conciseDescription ?? error.localizedDescription
             throw JSONDiffError.invalidJSON(side: side, detail: detail)
         }
     }
@@ -143,12 +94,7 @@ nonisolated enum JSONDiffEngine {
             removed: rows.count { $0.kind == .removed },
             modified: rows.count { $0.kind == .modified }
         )
-        return JSONDiffResult(
-            rows: rows,
-            formattedLeft: formattedLeft,
-            formattedRight: formattedRight,
-            summary: summary
-        )
+        return JSONDiffResult(rows: rows, formattedLeft: formattedLeft, formattedRight: formattedRight, summary: summary)
     }
 
     nonisolated static func compare(left: String, right: String) throws -> [DiffRow] {
@@ -156,27 +102,17 @@ nonisolated enum JSONDiffEngine {
     }
 
     nonisolated private static func lineDiff(left: [String], right: [String]) -> [DiffRow] {
-        // A newly inserted sibling changes the previous line's trailing comma. Treat that
-        // punctuation as formatting context, not as a user-visible value modification.
         let leftMatchKeys = left.map(matchingKey)
         let rightMatchKeys = right.map(matchingKey)
         let changes = rightMatchKeys.difference(from: leftMatchKeys)
         let removalOffsets = Set(changes.removals.map(\.offset))
         let insertionOffsets = Set(changes.insertions.map(\.offset))
-
         var rows: [DiffRow] = []
         var leftIndex = 0
         var rightIndex = 0
 
         func append(leftLine: Int?, rightLine: Int?, leftText: String, rightText: String, kind: DiffKind) {
-            rows.append(DiffRow(
-                id: rows.count,
-                leftLineNumber: leftLine,
-                rightLineNumber: rightLine,
-                left: leftText,
-                right: rightText,
-                kind: kind
-            ))
+            rows.append(DiffRow(id: rows.count, leftLineNumber: leftLine, rightLineNumber: rightLine, left: leftText, right: rightText, kind: kind))
         }
 
         while leftIndex < left.count || rightIndex < right.count {
@@ -184,13 +120,7 @@ nonisolated enum JSONDiffEngine {
             let hasInsertion = rightIndex < right.count && insertionOffsets.contains(rightIndex)
 
             if !hasRemoval, !hasInsertion, leftIndex < left.count, rightIndex < right.count {
-                append(
-                    leftLine: leftIndex + 1,
-                    rightLine: rightIndex + 1,
-                    leftText: left[leftIndex],
-                    rightText: right[rightIndex],
-                    kind: .unchanged
-                )
+                append(leftLine: leftIndex + 1, rightLine: rightIndex + 1, leftText: left[leftIndex], rightText: right[rightIndex], kind: .unchanged)
                 leftIndex += 1
                 rightIndex += 1
                 continue
@@ -210,13 +140,7 @@ nonisolated enum JSONDiffEngine {
 
             let pairedCount = min(removedLines.count, addedLines.count)
             for index in 0..<pairedCount {
-                append(
-                    leftLine: removedLines[index].number,
-                    rightLine: addedLines[index].number,
-                    leftText: removedLines[index].text,
-                    rightText: addedLines[index].text,
-                    kind: .modified
-                )
+                append(leftLine: removedLines[index].number, rightLine: addedLines[index].number, leftText: removedLines[index].text, rightText: addedLines[index].text, kind: .modified)
             }
             for line in removedLines.dropFirst(pairedCount) {
                 append(leftLine: line.number, rightLine: nil, leftText: line.text, rightText: "", kind: .removed)
@@ -266,37 +190,5 @@ nonisolated private extension CollectionDifference.Change {
         switch self {
         case let .insert(offset, _, _), let .remove(offset, _, _): offset
         }
-    }
-}
-
-nonisolated enum JSONFileLoader {
-    nonisolated enum LoadError: LocalizedError {
-        case notAFile
-        case fileTooLarge
-        case unsupportedEncoding
-
-        var errorDescription: String? {
-            switch self {
-            case .notAFile: "Choose a JSON file, not a folder."
-            case .fileTooLarge: "The selected file is larger than 50 MB."
-            case .unsupportedEncoding: "The file is not valid UTF-8 text."
-            }
-        }
-    }
-
-    static func load(from url: URL) async throws -> String {
-        try await Task.detached(priority: .userInitiated) {
-            let accessed = url.startAccessingSecurityScopedResource()
-            defer { if accessed { url.stopAccessingSecurityScopedResource() } }
-
-            let values = try url.resourceValues(forKeys: [.isRegularFileKey, .fileSizeKey])
-            guard values.isRegularFile == true else { throw LoadError.notAFile }
-            guard (values.fileSize ?? 0) <= 50 * 1_024 * 1_024 else { throw LoadError.fileTooLarge }
-            let data = try Data(contentsOf: url, options: [.mappedIfSafe])
-            guard let text = String(data: data, encoding: .utf8) else {
-                throw LoadError.unsupportedEncoding
-            }
-            return text
-        }.value
     }
 }
