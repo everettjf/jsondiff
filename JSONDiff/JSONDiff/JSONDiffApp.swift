@@ -19,6 +19,11 @@ struct JSONDiffApp: App {
                     NotificationCenter.default.post(name: .clearJSON, object: nil)
                 }
                 .keyboardShortcut(.delete, modifiers: [.command, .shift])
+
+                Button("Swap Sides") {
+                    NotificationCenter.default.post(name: .swapJSON, object: nil)
+                }
+                .keyboardShortcut("s", modifiers: [.command, .option])
             }
         }
 
@@ -42,4 +47,5 @@ struct JSONDiffApp: App {
 extension Notification.Name {
     static let compareJSON = Notification.Name("MyJSONDiff.compare")
     static let clearJSON = Notification.Name("MyJSONDiff.clear")
+    static let swapJSON = Notification.Name("MyJSONDiff.swap")
 }

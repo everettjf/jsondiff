@@ -1,6 +1,6 @@
 # MyJSONDiff
 
-MyJSONDiff is a clean, fast, native macOS app for comparing two JSON documents side by side. It normalizes object key order before diffing, so the results focus on real changes instead of formatting noise.
+MyJSONDiff is a private, fast, native macOS app for comparing two JSON documents side by side. It parses both documents into a decimal-safe JSON model, sorts object keys deterministically, and aligns the formatted output so results focus on data changes instead of formatting noise.
 
 ## Screenshot
 
@@ -17,10 +17,13 @@ App Store: https://apps.apple.com/us/app/myjsondiff/id6742816661
 ## Features
 
 - Side-by-side JSON editors with a clear, readable layout
-- Order-insensitive comparison via deterministic alphabetized key sorting
-- Professional diff visualization with added/removed/changed highlights
-- Handles nested objects and arrays
-- Color-coded output for quick scanning
+- Open or drag UTF-8 JSON files up to 50 MB
+- Order-insensitive object comparison via deterministic key sorting
+- Precise decimal rendering without binary floating-point artifacts
+- Aligned added, removed, and modified lines with inline change emphasis
+- Change counts and an option to hide unchanged lines
+- Copy or export a plain-text diff report
+- Handles objects, arrays, strings, numbers, booleans, nulls, and top-level fragments
 - Fully local processing with no network access
 - Native light and dark mode support
 - Keyboard shortcuts and VoiceOver-friendly controls
@@ -30,20 +33,29 @@ App Store: https://apps.apple.com/us/app/myjsondiff/id6742816661
 1. Paste JSON A on the left
 2. Paste JSON B on the right
 3. Click "Compare JSON"
-4. The tool sorts both objects by key order
-5. A structured, side-by-side diff is generated
+4. The tool parses exact JSON values and sorts object keys
+5. A native line-alignment engine pairs replacements and separates additions/removals
+6. Review, filter, copy, or export the side-by-side report
 
 ### Diff Legend
 
 - **Added** (green): present on the right, missing on the left
 - **Removed** (red): present on the left, missing on the right
-- **Changed** (yellow): same key, different value
+- **Modified** (orange): aligned content changed between the two documents
 
 ## Tech Stack
 
-- Swift and SwiftUI
-- Foundation `JSONSerialization` for parsing and deterministic sorted-key formatting
-- A native Swift line-diff engine
+- Swift and SwiftUI, with no embedded browser or JavaScript runtime
+- `JSONDecoder` with `Decimal` values for exact numeric rendering
+- A native Swift alignment engine built on `CollectionDifference`
+
+## Requirements
+
+- macOS 14 or later
+
+## Privacy
+
+All comparison and file processing happens on-device. MyJSONDiff has no network dependency and does not upload document contents.
 
 ## Local Development
 
