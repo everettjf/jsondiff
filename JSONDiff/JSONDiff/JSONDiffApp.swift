@@ -8,6 +8,7 @@ struct JSONDiffApp: App {
                 .frame(minWidth: 820, minHeight: 560)
         }
         .defaultSize(width: 1180, height: 760)
+        .windowResizability(.contentMinSize)
         .commands {
             CommandGroup(after: .newItem) {
                 Button("Compare JSON") {

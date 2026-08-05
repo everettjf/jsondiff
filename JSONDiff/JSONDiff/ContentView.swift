@@ -385,11 +385,14 @@ private struct DiffResultView: View {
             }
             .frame(height: 34)
             Divider()
-            ScrollView([.vertical, .horizontal]) {
-                LazyVStack(alignment: .leading, spacing: 0) {
-                    ForEach(visibleRows) { row in
-                        DiffRowView(row: row)
+            GeometryReader { geometry in
+                ScrollView([.vertical, .horizontal]) {
+                    LazyVStack(alignment: .leading, spacing: 0) {
+                        ForEach(visibleRows) { row in
+                            DiffRowView(row: row)
+                        }
                     }
+                    .frame(minWidth: max(geometry.size.width, 1_040), alignment: .leading)
                 }
             }
         }
