@@ -8,6 +8,7 @@ struct ContentView: View {
     @State private var isImporting = false
     @State private var isExporting = false
     @State private var exportDocument = PlainTextDocument(text: "")
+    @State private var exportText = ""
     @FocusState private var focusedEditor: EditorSide?
 
     var body: some View {
@@ -33,13 +34,12 @@ struct ContentView: View {
         )
         .fileDialogMessage("Choose a UTF-8 JSON document")
         .fileDialogConfirmationLabel("Open JSON")
-        .fileExporter(
+        .modifier(JSONDiffExportModifier(
             isPresented: $isExporting,
-            document: exportDocument,
-            contentType: .plainText,
-            defaultFilename: "MyJSONDiff.txt",
+            legacyDocument: exportDocument,
+            text: exportText,
             onCompletion: handleExport
-        )
+        ))
         .onReceive(NotificationCenter.default.publisher(for: .compareJSON)) { _ in compare() }
         .onReceive(NotificationCenter.default.publisher(for: .clearJSON)) { _ in model.clear() }
         .onReceive(NotificationCenter.default.publisher(for: .swapJSON)) { _ in model.swapInputs() }
@@ -130,8 +130,37 @@ struct ContentView: View {
 
     private func prepareExport() {
         guard let result = model.result else { return }
+        exportText = result.exportText
         exportDocument = PlainTextDocument(text: result.exportText)
         isExporting = true
+    }
+}
+
+private struct JSONDiffExportModifier: ViewModifier {
+    @Binding var isPresented: Bool
+    let legacyDocument: PlainTextDocument
+    let text: String
+    let onCompletion: (Result<URL, any Error>) -> Void
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if #available(macOS 27.0, *) {
+            content.fileExporter(
+                isPresented: $isPresented,
+                document: AsyncPlainTextDocument(text: text),
+                contentType: .plainText,
+                defaultFilename: "MyJSONDiff.txt",
+                onCompletion: onCompletion
+            )
+        } else {
+            content.fileExporter(
+                isPresented: $isPresented,
+                document: legacyDocument,
+                contentType: .plainText,
+                defaultFilename: "MyJSONDiff.txt",
+                onCompletion: onCompletion
+            )
+        }
     }
 }
 
