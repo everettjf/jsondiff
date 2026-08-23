@@ -2,7 +2,7 @@
 
 Repository: <https://github.com/everettjf/jsondiff>
 
-MyJSONDiff is a private, fast, native macOS app for comparing two JSON documents side by side. It parses both documents into a decimal-safe JSON model, sorts object keys deterministically, and aligns the formatted output so results focus on data changes instead of formatting noise.
+MyJSONDiff is a privacy-first, fast, native macOS app for comparing two JSON documents side by side. It parses both documents into a decimal-safe JSON model, sorts object keys deterministically, and aligns the formatted output so results focus on data changes instead of formatting noise.
 
 ## Screenshot
 
@@ -12,9 +12,15 @@ MyJSONDiff is a private, fast, native macOS app for comparing two JSON documents
 
 Official site: https://www.xnu.app/jsondiff
 
-## Download
+## Install
 
-App Store: https://apps.apple.com/us/app/myjsondiff/id6742816661
+MyJSONDiff is distributed as a signed and notarized Homebrew Cask:
+
+```bash
+brew install --cask everettjf/tap/myjsondiff
+```
+
+The former Mac App Store listing has been retired.
 
 ## Features
 
