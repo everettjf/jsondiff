@@ -39,3 +39,7 @@ When changing comparison behavior, verify nested objects, arrays, JSON fragments
 ## Documentation and Releases
 
 Update `README.md` whenever requirements, features, screenshots, build commands, or architecture change. Keep the public repository URL canonical: `https://github.com/everettjf/jsoncompare`.
+
+The current bundle identifier is `com.xnu.jsoncompare`. The retired MyJSONDiff App Store record and its old `com.xnu.jsondiff` identity are intentionally not compatibility targets. A future App Store release must be created as a new app.
+
+The Xcode target defaults to App Sandbox for future App Store builds. The Homebrew release script explicitly overrides `ENABLE_APP_SANDBOX=NO` for Developer ID distribution; preserve this channel-specific split.

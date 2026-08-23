@@ -22,6 +22,8 @@ brew install --cask everettjf/tap/jsoncompare
 
 The former Mac App Store listing has been retired.
 
+Any future Mac App Store release will be a new application using the bundle identifier `com.xnu.jsoncompare`; it will not replace or inherit the retired MyJSONDiff listing.
+
 ## Features
 
 - Side-by-side JSON editors with a clear, readable layout

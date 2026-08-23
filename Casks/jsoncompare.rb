@@ -12,7 +12,7 @@ cask "jsoncompare" do
   app "JSON Compare.app"
 
   zap trash: [
-    "~/Library/Preferences/com.xnu.jsondiff.plist",
-    "~/Library/Saved Application State/com.xnu.jsondiff.savedState",
+    "~/Library/Preferences/com.xnu.jsoncompare.plist",
+    "~/Library/Saved Application State/com.xnu.jsoncompare.savedState",
   ]
 end
