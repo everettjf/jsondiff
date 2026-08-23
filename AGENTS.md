@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-MyJSONDiff is a native macOS SwiftUI app for comparing two JSON documents. It parses both inputs with Foundation, serializes objects with stable sorted keys, and renders an order-insensitive side-by-side line diff. The legacy Tauri/Next.js implementation has been retired; do not reintroduce a web runtime or JavaScript dependency for core comparison behavior.
+JSON Compare is a native macOS SwiftUI app for comparing two JSON documents. It parses both inputs with Foundation, serializes objects with stable sorted keys, and renders an order-insensitive side-by-side line diff. The legacy Tauri/Next.js implementation has been retired; do not reintroduce a web runtime or JavaScript dependency for core comparison behavior.
 
 ## Structure
 
@@ -38,4 +38,4 @@ When changing comparison behavior, verify nested objects, arrays, JSON fragments
 
 ## Documentation and Releases
 
-Update `README.md` whenever requirements, features, screenshots, build commands, or architecture change. Keep the public repository URL canonical: `https://github.com/everettjf/jsondiff`.
+Update `README.md` whenever requirements, features, screenshots, build commands, or architecture change. Keep the public repository URL canonical: `https://github.com/everettjf/jsoncompare`.

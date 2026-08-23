@@ -1,6 +1,6 @@
 extension JSONDiffResult {
     var exportText: String {
-        var output = "MyJSONDiff Report\n"
+        var output = "JSON Compare Report\n"
         output += "Modified: \(summary.modified)  Added: \(summary.added)  Removed: \(summary.removed)\n\n"
         for row in rows where row.kind != .unchanged {
             switch row.kind {

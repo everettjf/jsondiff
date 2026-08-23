@@ -27,11 +27,11 @@ jobs:
             -scheme JSONDiff \
             -configuration Debug \
             -destination 'platform=macOS' \
-            -derivedDataPath "$RUNNER_TEMP/MyJSONDiffDerivedData" \
+            -derivedDataPath "$RUNNER_TEMP/JSONCompareDerivedData" \
             CODE_SIGNING_ALLOWED=NO \
             build
       - name: Validate release files
         run: |
           bash -n scripts/build-release.sh scripts/verify-homebrew-release.sh
           ruby -c scripts/update-cask.rb
-          ruby -c Casks/myjsondiff.rb
+          ruby -c Casks/jsoncompare.rb
