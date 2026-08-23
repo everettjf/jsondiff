@@ -32,7 +32,7 @@ struct JSONDiffApp: App {
             Form {
                 Section("More Apps") {
                     Link(destination: URL(string: "https://apps.apple.com/us/app/startmyapp-fast-app-launch/id6753610893")!) {
-                        Label("StartMyApp", systemImage: "bolt")
+                        Label("LaunchDeck", systemImage: "bolt")
                     }
                     Link(destination: URL(string: "https://apps.apple.com/us/app/scriptwidget/id1555600758")!) {
                         Label("ScriptWidget", systemImage: "curlybraces.square")
