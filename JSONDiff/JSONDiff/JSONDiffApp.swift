@@ -31,6 +31,9 @@ struct JSONDiffApp: App {
         Settings {
             Form {
                 Section("More Apps") {
+                    Link(destination: URL(string: "https://xnu.app/grapecompare/")!) {
+                        Label("GrapeCompare", systemImage: "arrow.left.arrow.right")
+                    }
                     Link(destination: URL(string: "https://apps.apple.com/us/app/startmyapp-fast-app-launch/id6753610893")!) {
                         Label("LaunchDeck", systemImage: "bolt")
                     }

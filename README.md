@@ -4,6 +4,10 @@ Repository: <https://github.com/everettjf/jsoncompare>
 
 JSON Compare is a privacy-first, fast, native macOS app for comparing two JSON documents side by side. It parses both documents into a decimal-safe JSON model, sorts object keys deterministically, and aligns the formatted output so results focus on data changes instead of formatting noise.
 
+## Maintenance Status
+
+JSON Compare is in maintenance mode. It will continue to receive essential compatibility and reliability fixes, but no new comparison features are planned. For JSON and plist comparison alongside text, folders, images, Git difftool/mergetool, and three-way merge, use [GrapeCompare](https://xnu.app/grapecompare/).
+
 ## Screenshot
 
 ![JSON Compare screenshot](screenshot.png)
@@ -84,7 +88,7 @@ xcodebuild -project JSONDiff/JSONDiff.xcodeproj \
 
 ## Contributing
 
-Issues and pull requests are welcome.
+Issues and pull requests for compatibility and reliability fixes are welcome. New comparison capabilities belong in [GrapeCompare](https://github.com/everettjf/grapecompare).
 
 ## License
 
