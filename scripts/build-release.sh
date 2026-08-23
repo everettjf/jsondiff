@@ -5,7 +5,7 @@ project_root="$(cd "$(dirname "$0")/.." && pwd)"
 raw_version="${1:-}"
 version="${raw_version#v}"
 output_dir="${2:-$project_root/dist}"
-derived_data="${MYJSONDIFF_DERIVED_DATA:-$(mktemp -d "${RUNNER_TEMP:-/tmp}/myjsondiff-release.XXXXXX")}"
+derived_data="${JSONCOMPARE_DERIVED_DATA:-$(mktemp -d "${RUNNER_TEMP:-/tmp}/jsoncompare-release.XXXXXX")}"
 
 if [[ -z "$version" ]]; then
   echo "usage: $0 <version> [output-directory]" >&2
@@ -26,11 +26,11 @@ xcodebuild \
   MARKETING_VERSION="$version" \
   build
 
-app_path="$derived_data/Build/Products/Release/MyJSONDiff.app"
+app_path="$derived_data/Build/Products/Release/JSON Compare.app"
 staging_dir="$output_dir/.staging"
-staged_app="$staging_dir/MyJSONDiff.app"
-archive="$output_dir/MyJSONDiff-$version.zip"
-identity="${MYJSONDIFF_SIGNING_IDENTITY:--}"
+staged_app="$staging_dir/JSON Compare.app"
+archive="$output_dir/JSONCompare-$version.zip"
+identity="${JSONCOMPARE_SIGNING_IDENTITY:--}"
 signing_options=(--force --deep --options runtime --sign "$identity")
 if [[ "$identity" == "-" ]]; then
   signing_options+=(--timestamp=none)
@@ -48,9 +48,9 @@ fi
 rm -rf "$staging_dir"
 mkdir -p "$staging_dir"
 ditto "$app_path" "$staged_app"
-lipo -verify_arch arm64 "$staged_app/Contents/MacOS/MyJSONDiff"
-lipo -verify_arch x86_64 "$staged_app/Contents/MacOS/MyJSONDiff"
-minimum_version="$(vtool -show-build "$staged_app/Contents/MacOS/MyJSONDiff" | awk '/minos/{print $2; exit}')"
+lipo -verify_arch arm64 "$staged_app/Contents/MacOS/JSON Compare"
+lipo -verify_arch x86_64 "$staged_app/Contents/MacOS/JSON Compare"
+minimum_version="$(vtool -show-build "$staged_app/Contents/MacOS/JSON Compare" | awk '/minos/{print $2; exit}')"
 if [[ "$minimum_version" != "14.0" ]]; then
   echo "unexpected minimum macOS version: ${minimum_version:-unknown}" >&2
   exit 66

@@ -1,23 +1,23 @@
-# MyJSONDiff
+# JSON Compare
 
-Repository: <https://github.com/everettjf/jsondiff>
+Repository: <https://github.com/everettjf/jsoncompare>
 
-MyJSONDiff is a privacy-first, fast, native macOS app for comparing two JSON documents side by side. It parses both documents into a decimal-safe JSON model, sorts object keys deterministically, and aligns the formatted output so results focus on data changes instead of formatting noise.
+JSON Compare is a privacy-first, fast, native macOS app for comparing two JSON documents side by side. It parses both documents into a decimal-safe JSON model, sorts object keys deterministically, and aligns the formatted output so results focus on data changes instead of formatting noise.
 
 ## Screenshot
 
-![MyJSONDiff screenshot](screenshot.png)
+![JSON Compare screenshot](screenshot.png)
 
 ## Website
 
-Official site: https://www.xnu.app/jsondiff
+Official site: https://www.xnu.app/jsoncompare
 
 ## Install
 
-MyJSONDiff is distributed as a signed and notarized Homebrew Cask:
+JSON Compare is distributed as a signed and notarized Homebrew Cask:
 
 ```bash
-brew install --cask everettjf/tap/myjsondiff
+brew install --cask everettjf/tap/jsoncompare
 ```
 
 The former Mac App Store listing has been retired.
@@ -63,7 +63,7 @@ The former Mac App Store listing has been retired.
 
 ## Privacy
 
-All comparison and file processing happens on-device. MyJSONDiff has no network dependency and does not upload document contents.
+All comparison and file processing happens on-device. JSON Compare has no network dependency and does not upload document contents.
 
 ## Local Development
 
@@ -90,4 +90,4 @@ MIT
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=everettjf/jsondiff&type=Date)](https://star-history.com/#everettjf/jsondiff&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=everettjf/jsoncompare&type=Date)](https://star-history.com/#everettjf/jsoncompare&Date)

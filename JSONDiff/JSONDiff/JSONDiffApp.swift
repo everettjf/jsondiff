@@ -46,7 +46,7 @@ struct JSONDiffApp: App {
 }
 
 extension Notification.Name {
-    static let compareJSON = Notification.Name("MyJSONDiff.compare")
-    static let clearJSON = Notification.Name("MyJSONDiff.clear")
-    static let swapJSON = Notification.Name("MyJSONDiff.swap")
+    static let compareJSON = Notification.Name("JSONCompare.compare")
+    static let clearJSON = Notification.Name("JSONCompare.clear")
+    static let swapJSON = Notification.Name("JSONCompare.swap")
 }

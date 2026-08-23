@@ -149,7 +149,7 @@ private struct JSONDiffExportModifier: ViewModifier {
                 isPresented: $isPresented,
                 document: AsyncPlainTextDocument(text: text),
                 contentType: .plainText,
-                defaultFilename: "MyJSONDiff.txt",
+                defaultFilename: "JSON Compare.txt",
                 onCompletion: onCompletion
             )
         } else {
@@ -157,7 +157,7 @@ private struct JSONDiffExportModifier: ViewModifier {
                 isPresented: $isPresented,
                 document: legacyDocument,
                 contentType: .plainText,
-                defaultFilename: "MyJSONDiff.txt",
+                defaultFilename: "JSON Compare.txt",
                 onCompletion: onCompletion
             )
         }
