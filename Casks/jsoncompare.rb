@@ -4,10 +4,11 @@ cask "jsoncompare" do
 
   url "https://github.com/everettjf/jsoncompare/releases/download/v#{version}/JSONCompare-#{version}.zip"
   name "JSON Compare"
-  desc "Fast, native, order-insensitive JSON comparison for macOS"
+  desc "Fast, native, order-insensitive JSON comparison"
   homepage "https://xnu.app/jsoncompare/"
 
   depends_on macos: :sonoma
+
   app "JSON Compare.app"
 
   zap trash: [
