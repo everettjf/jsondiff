@@ -7,7 +7,7 @@ cask "myjsondiff" do
   desc "Fast, native, order-insensitive JSON comparison for macOS"
   homepage "https://xnu.app/jsondiff/"
 
-  depends_on macos: ">= :sonoma"
+  depends_on macos: :sonoma
   app "MyJSONDiff.app"
 
   zap trash: [
